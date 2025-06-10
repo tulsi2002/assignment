@@ -9,6 +9,7 @@ venv/
 *.db
 # migrations/*.pyc
 # migrations/__pycache__/
+uploads
 
 # OS files
 .DS_Store
