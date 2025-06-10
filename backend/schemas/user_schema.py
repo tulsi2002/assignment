@@ -13,6 +13,12 @@ class UserLogin(BaseModel):
     email : EmailStr
     password : str
 
+# used for update password:
+class UpdatePasswordRequest(BaseModel):
+    current_password : str
+    new_password : str
+    confirm_new_password : str
+
 # response 
 class UserResponse(BaseModel):
     id : int

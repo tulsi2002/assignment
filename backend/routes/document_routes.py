@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
 from sqlalchemy.orm import Session
 from backend.cruds import document_crud
 from backend.models.user import User
+from backend.models.document import Document
 from backend.schemas.document_schema import DocumentOut
 from backend.utils.logger import logger
 from backend.utils.encryption_utlis import encrypt_file, decrypt_file, fernet, encrypt_bytes
@@ -83,6 +84,33 @@ def download_document(document_id: int, db: Session= Depends(get_db), current_us
     # sent file to client
     return FileResponse(decrypted_file_path, media_type=document.file_type, filename=document.file_name)
 
-        
+
+# Delete document
+@router.delete("/document/{document_id}")
+def delete_document(document_id: int, db: Session= Depends(get_db), current_user: User = Depends(get_current_user_from_token)):
+    # check if documents exists:
+    document = db.query(Document).filter(Document.id == document_id).first()
+    if document is None:
+        logger.warning(f"Document with id {document_id} not found.")
+        raise HTTPException(status_code=404, detail="Document not found")
+    # check permission:
+    if current_user.role == "Admin":
+        logger.info(f"Admin {current_user.email} deleting document {document_id}.")
+    elif current_user.role == "Uploader":
+        if document.owner_id != current_user.id:
+            logger.warning(f"Uploader {current_user.email} not allowed to delete document {document_id} owned by user_id {document.owner_id}.")
+            raise HTTPException(status_code=403, detail="You can only delete your own documents")
+        else:
+            logger.info(f"Uploader {current_user.email} deleting own document {document_id}.")
+    
+    db.delete(document)
+    db.commit()
+    
+    logger.info(f"Document {document_id} deleted successfully.")
+    return {"message": "Document deleted successfully"}
+
+
+
+
 
 
