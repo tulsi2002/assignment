@@ -1,0 +1,12 @@
+fastapi==0.110.0	      # Main API framework
+uvicorn==0.29.0	          # ASGI server to run FastAPI
+sqlalchemy==2.0.30	      # ORM to interact with PostgreSQL
+psycopg2-binary==2.9.9	  # PostgreSQL driver
+alembic==1.13.1	          # Database migrations
+python-dotenv==1.0.1	  # Load .env file variables
+passlib[bcrypt]==1.7.4	  # Password hashing for secure passwords
+PyJWT==2.8.0	          # Create and verify JWT tokens
+cryptography==42.0.5	  # Encrypt and decrypt document files
+python-multipart==0.0.9	  # Handle file uploads (for /documents/upload API)
+pydantic                  # used for data validation
+jose                      # jose is python library that helps in JWT creation & decoding.
