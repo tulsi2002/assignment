@@ -24,6 +24,8 @@ def get_current_user_from_token(token: str= Security(api_key_header), db:Session
         if user_id is None or role is None:
             raise HTTPException(status_code=401, detail="Invalid Token")
         
+        if role not in ["uploader", "admin"]:
+            raise HTTPException(status_code=401, detail="Invalid Role")        
         # get user from database:
         user = get_user_by_id(db, user_id)
         if user is None:

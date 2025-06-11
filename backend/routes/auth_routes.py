@@ -26,6 +26,10 @@ def register(user_in:UserCreate, db:Session = Depends(get_db)):
         logger.warning(f"Password do not match for email: {user_in.email}")
         raise HTTPException(status_code=400, detail="Passwords do not match")
     
+    allowed_roles = ["admin", "uploader"]
+    if user_in.role not in allowed_roles:
+        raise HTTPException(status_code=403, detail="Invalid Role")
+
     user = create_user(db, user_in)
     logger.info(f"User registered successfully: {user.email}")
     return {"message": "User registered successfully"}
