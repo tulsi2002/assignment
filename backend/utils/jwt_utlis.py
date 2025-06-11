@@ -3,8 +3,8 @@
 1. create_access_token() --> to generate JWT Token.
 2. decode_access_token() --> used later when we want to validate token
 '''
-# jose.jwt is a python library that support jwt creation and decoding . work well with fastapi .
-from jose import jwt  
+# pyjwt library is used for authentication and token creation.
+import jwt 
 import os
 from dotenv import load_dotenv
 from datetime import datetime, timedelta  # used to set token expiration time
